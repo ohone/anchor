@@ -99,7 +99,7 @@ contract Comptroller is ComptrollerV6Storage, ComptrollerInterface, ComptrollerE
      * @param cToken The cToken to check
      * @return True if the account is in the asset, otherwise false.
      */
-    function checkMembership(address account, CToken cToken) external view returns (bool) {
+    function checkMembership(address account, CToken cToken) public view returns (bool) {
         return markets[address(cToken)].accountMembership[account];
     }
 
@@ -1050,7 +1050,7 @@ contract Comptroller is ComptrollerV6Storage, ComptrollerInterface, ComptrollerE
         else{
             require(msg.sender == pauseGuardian || msg.sender == admin, "only pause guardian and admin can pause");
         }
-
+        
         collateralPaused(address(cToken), state);
 
         emit ActionPaused("Collateral", state);
