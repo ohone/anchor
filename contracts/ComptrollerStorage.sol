@@ -5,23 +5,23 @@ import "./PriceOracle.sol";
 
 contract UnitrollerAdminStorage {
     /**
-     * @notice Administrator for this contract
-     */
+    * @notice Administrator for this contract
+    */
     address public admin;
 
     /**
-     * @notice Pending administrator for this contract
-     */
+    * @notice Pending administrator for this contract
+    */
     address public pendingAdmin;
 
     /**
-     * @notice Active brains of Unitroller
-     */
+    * @notice Active brains of Unitroller
+    */
     address public comptrollerImplementation;
 
     /**
-     * @notice Pending brains of Unitroller
-     */
+    * @notice Pending brains of Unitroller
+    */
     address public pendingComptrollerImplementation;
 }
 
@@ -145,6 +145,6 @@ contract ComptrollerV5Storage is ComptrollerV4Storage {
 }
 
 contract ComptrollerV6Storage is ComptrollerV5Storage {
-    /// @notice State of CTokens being paused.
+    /// @notice The CToken collateral currently paused.
     mapping(address => bool) public collateralPaused;
 }
