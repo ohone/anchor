@@ -12,7 +12,7 @@ import "./Governance/IINV.sol";
  * @title Compound's Comptroller Contract
  * @author Compound
  */
-contract Comptroller is ComptrollerV5Storage, ComptrollerInterface, ComptrollerErrorReporter, ExponentialNoError {
+contract Comptroller is ComptrollerV6Storage, ComptrollerInterface, ComptrollerErrorReporter, ExponentialNoError {
     /// @notice Emitted when an admin supports a market
     event MarketListed(CToken cToken);
 
@@ -335,7 +335,12 @@ contract Comptroller is ComptrollerV5Storage, ComptrollerInterface, ComptrollerE
             return uint(Error.MARKET_NOT_LISTED);
         }
 
-        if (!markets[cToken].accountMembership[borrower]) {
+        if (checkMembership(borrower, CToken(cToken))){
+            if (CollateralPaued(cToken)){
+                return uint(Error.PAUSED_COLLATERAL);
+            }
+        }
+        else{
             // only cTokens may call borrowAllowed if borrower not in market
             require(msg.sender == cToken, "sender must be cToken");
 
@@ -1034,6 +1039,21 @@ contract Comptroller is ComptrollerV5Storage, ComptrollerInterface, ComptrollerE
 
         seizeGuardianPaused = state;
         emit ActionPaused("Seize", state);
+        return state;
+    }
+
+    function _setCollateralPaused(CToken cToken, bool state) public returns (bool) {
+        if (!state){
+            require(
+                msg.sender == admin, "only admin can unpause");
+        }
+        else{
+            require(msg.sender == pauseGuardian || msg.sender == admin, "only pause guardian and admin can pause");
+        }
+
+        collateralPaused(address(cToken), state);
+
+        emit ActionPaused("Collateral", state);
         return state;
     }
 

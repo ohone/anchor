@@ -5,23 +5,23 @@ import "./PriceOracle.sol";
 
 contract UnitrollerAdminStorage {
     /**
-    * @notice Administrator for this contract
-    */
+     * @notice Administrator for this contract
+     */
     address public admin;
 
     /**
-    * @notice Pending administrator for this contract
-    */
+     * @notice Pending administrator for this contract
+     */
     address public pendingAdmin;
 
     /**
-    * @notice Active brains of Unitroller
-    */
+     * @notice Active brains of Unitroller
+     */
     address public comptrollerImplementation;
 
     /**
-    * @notice Pending brains of Unitroller
-    */
+     * @notice Pending brains of Unitroller
+     */
     address public pendingComptrollerImplementation;
 }
 
@@ -142,4 +142,9 @@ contract ComptrollerV5Storage is ComptrollerV4Storage {
 
     /// @notice Last block at which a contributor's COMP rewards have been allocated
     mapping(address => uint) public lastContributorBlock;
+}
+
+contract ComptrollerV6Storage is ComptrollerV5Storage {
+    /// @notice State of CTokens being paused.
+    mapping(address => bool) public collateralPaused;
 }
